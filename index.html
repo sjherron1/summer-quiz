@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F4F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Summer Quiz">
+<title>Summer Brain Boost</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{--bg:#F4F4F2;--ink:#1E293B;}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Nunito',ui-rounded,'SF Pro Rounded','Segoe UI',system-ui,sans-serif;-webkit-text-size-adjust:100%;}
+.display{font-family:'Fredoka',ui-rounded,'SF Pro Rounded','Segoe UI',system-ui,sans-serif;}
+.wrap{max-width:640px;margin:0 auto;padding:32px 18px 56px;}
+.center{text-align:center;}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#FEF3C7;color:#B45309;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+.h1{font-size:34px;line-height:1.12;font-weight:700;margin:0;}
+@media(min-width:520px){.h1{font-size:42px;}}
+.sub{color:#64748B;font-size:16px;margin:12px 0 0;}
+.seglabel{text-align:center;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8;margin:28px 0 8px;}
+.seg{display:flex;background:#E7E7E3;border-radius:16px;padding:4px;max-width:360px;margin:0 auto 28px;}
+.seg button{flex:1;border:0;background:transparent;font-family:inherit;font-weight:800;font-size:14px;color:#64748B;padding:9px 0;border-radius:12px;cursor:pointer;}
+.seg button.on{background:#fff;color:#1E293B;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:520px){.grid{grid-template-columns:1fr 1fr;}}
+.card{display:block;text-align:left;background:#fff;border:1px solid #ECECE8;border-radius:24px;padding:20px;cursor:pointer;font-family:inherit;transition:transform .15s;box-shadow:0 1px 3px rgba(15,23,42,.06);width:100%;}
+.card:hover{transform:translateY(-2px);}
+.cardtop{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.ic{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:16px;font-size:26px;}
+.ic.sm{width:32px;height:32px;font-size:18px;border-radius:10px;}
+.cardname{font-size:20px;font-weight:700;}
+.blurb{color:#64748B;font-size:14px;}
+.cardfoot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:8px;}
+.start{font-weight:800;font-size:14px;}
+.pill{font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;white-space:nowrap;}
+.pill.muted{color:#CBD5E1;}
+.reset{margin-top:24px;border:0;background:transparent;color:#94A3B8;font-weight:800;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;}
+.qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.qhleft{display:flex;align-items:center;gap:8px;font-size:14px;}
+.qhright{display:flex;align-items:center;gap:10px;}
+.count{font-size:14px;font-weight:800;color:#64748B;}
+.homebtn{border:0;background:transparent;color:#94A3B8;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;padding:6px 8px;border-radius:10px;}
+.bar{width:100%;height:8px;background:#E7E7E3;border-radius:999px;overflow:hidden;margin-bottom:24px;}
+.bar span{display:block;height:100%;border-radius:999px;transition:width .3s;}
+.passage{padding:16px;border-radius:16px;font-size:14px;line-height:1.55;color:#334155;margin-bottom:16px;}
+.q{font-family:'Nunito',ui-rounded,'SF Pro Rounded','Segoe UI',system-ui,sans-serif;font-size:23px;line-height:1.35;font-weight:800;color:#0F172A;margin:0 0 20px;}
+.opts{display:flex;flex-direction:column;gap:12px;}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:#fff;border:1.5px solid #ECECE8;border-radius:16px;padding:15px 16px;font-family:inherit;font-weight:600;font-size:16px;color:#1E293B;cursor:pointer;}
+.opt.correct{background:#ECFDF5;border-color:#10B981;color:#065F46;}
+.opt.wrong{background:#FFF1F2;border-color:#F43F5E;color:#9F1239;}
+.opt.dim{color:#94A3B8;}
+.opt:disabled{cursor:default;}
+.oi{font-size:18px;font-weight:800;}
+.fb{margin-top:20px;padding:16px;border-radius:16px;background:#FFF7ED;border:1px solid #FED7AA;}
+.fb.ok{background:#ECFDF5;border-color:#A7F3D0;}
+.fbh{font-weight:700;font-size:17px;margin-bottom:4px;}
+.fbe{font-size:14px;line-height:1.55;color:#334155;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;color:#fff;font-family:inherit;font-weight:800;font-size:16px;padding:12px 20px;border-radius:14px;cursor:pointer;margin-top:12px;}
+.btn.ghost{background:#fff!important;color:#334155;border:1px solid #ECECE8;}
+.results{padding-top:24px;}
+.trophy{display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;border-radius:999px;font-size:38px;margin-bottom:18px;}
+.score{font-size:40px;font-weight:700;margin:0;}
+.rmsg{font-size:18px;color:#475569;margin:8px 0 0;}
+.rsub{font-size:14px;font-weight:800;color:#94A3B8;margin:4px 0 0;}
+.rbtns{display:flex;flex-direction:column;gap:12px;max-width:360px;margin:28px auto 0;}
+.rbtns .btn{margin-top:0;width:100%;}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function(){
+  var app = document.getElementById('app');
+
+  var SUBJECTS = [
+    {id:"Math", label:"Math", blurb:"Fractions, ratios, integers & equations", color:"#2563EB", tint:"#EFF6FF", icon:"\uD83E\uDDEE"},
+    {id:"Reading/Writing", label:"Reading & Writing", blurb:"Passages, vocabulary & grammar", color:"#059669", tint:"#ECFDF5", icon:"\uD83D\uDCD6"},
+    {id:"Science", label:"Science", blurb:"Life, earth & physical science", color:"#7C3AED", tint:"#F5F3FF", icon:"\uD83D\uDD2C"},
+    {id:"Social Studies", label:"Social Studies", blurb:"Geography, history & civics", color:"#D97706", tint:"#FFFBEB", icon:"\uD83C\uDF0E"}
+  ];
+  var DIFF = ["Easier","On-level","Challenge"];
+
+  // Bank. Keys: d=difficulty, p=passage(optional), q=question, o=options
+  // (correct answer is listed FIRST), c=index of correct (always 0), e=explanation.
+  // Answer order is shuffled at runtime so the position never gives it away.
+  var BANK = {
+   "Math":[
+    {d:"Easier",q:"What is 3/4 + 1/4?",o:["1","1/2","2/4","3/8"],c:0,e:"Same denominators add the tops: 3 + 1 = 4, and 4/4 = 1."},
+    {d:"Easier",q:"What is 25% of 80?",o:["20","25","40","16"],c:0,e:"25% is one quarter, and 80 \u00F7 4 = 20."},
+    {d:"Easier",q:"Which is greater: 0.5 or 0.45?",o:["0.5","0.45","They're equal","Can't tell"],c:0,e:"0.50 is more than 0.45."},
+    {d:"Easier",q:"Round 3.78 to the nearest whole number.",o:["4","3","3.8","3.7"],c:0,e:"0.78 rounds up to the next whole number, 4."},
+    {d:"Easier",q:"What is 1/2 of 18?",o:["9","6","8","12"],c:0,e:"Half of 18 is 9."},
+    {d:"Easier",q:"How many sides does a hexagon have?",o:["6","5","7","8"],c:0,e:"Hexa means six."},
+    {d:"Easier",q:"What is 100 \u2212 37?",o:["63","73","67","57"],c:0,e:"100 \u2212 37 = 63."},
+    {d:"Easier",q:"What is 6 \u00D7 7?",o:["42","48","36","49"],c:0,e:"Six sevens make 42."},
+    {d:"Easier",q:"What is 9 + 6?",o:["15","16","13","14"],c:0,e:"9 + 6 = 15."},
+    {d:"Easier",q:"What is 8 \u00D7 5?",o:["40","45","32","48"],c:0,e:"Eight fives make 40."},
+    {d:"Easier",q:"What is 1/3 + 1/3?",o:["2/3","1/3","2/6","1/6"],c:0,e:"Add the tops: 1 + 1 = 2 thirds."},
+    {d:"Easier",q:"Which number is even?",o:["12","7","15","9"],c:0,e:"Even numbers end in 0, 2, 4, 6, or 8."},
+    {d:"Easier",q:"What is 50% of 30?",o:["15","20","25","10"],c:0,e:"50% is half, and half of 30 is 15."},
+    {d:"Easier",q:"Write 3/10 as a decimal.",o:["0.3","0.03","3.0","0.13"],c:0,e:"Three tenths is 0.3."},
+    {d:"On-level",q:"Simplify the ratio 12:18.",o:["2:3","3:2","6:9","4:5"],c:0,e:"Divide both numbers by 6."},
+    {d:"On-level",q:"What is \u22125 + 8?",o:["3","-3","13","-13"],c:0,e:"Moving up 8 from \u22125 lands on 3."},
+    {d:"On-level",q:"A $20 shirt is 15% off. How big is the discount?",o:["$3","$15","$5","$1.50"],c:0,e:"15% of 20 = 0.15 \u00D7 20 = 3."},
+    {d:"On-level",q:"Solve x + 7 = 12.",o:["5","19","7","6"],c:0,e:"Subtract 7 from both sides."},
+    {d:"On-level",q:"Area of a rectangle 8 cm by 3 cm?",o:["24 cm\u00B2","11 cm\u00B2","22 cm\u00B2","16 cm\u00B2"],c:0,e:"Area = length \u00D7 width = 8 \u00D7 3."},
+    {d:"On-level",q:"What is 2/3 of 21?",o:["14","7","18","12"],c:0,e:"21 \u00F7 3 = 7, then \u00D7 2 = 14."},
+    {d:"On-level",q:"Find the mean of 4, 8, and 6.",o:["6","18","8","4"],c:0,e:"(4 + 8 + 6) \u00F7 3 = 18 \u00F7 3 = 6."},
+    {d:"On-level",q:"A car drives 150 miles in 3 hours. Its speed?",o:["50 mph","45 mph","450 mph","30 mph"],c:0,e:"150 \u00F7 3 = 50 miles per hour."},
+    {d:"On-level",q:"What is \u22123 \u2212 4?",o:["-7","7","-1","1"],c:0,e:"Going 4 more below \u22123 reaches \u22127."},
+    {d:"On-level",q:"What is 20% of 50?",o:["10","20","5","15"],c:0,e:"0.20 \u00D7 50 = 10."},
+    {d:"On-level",q:"Solve 5x = 30.",o:["6","25","35","150"],c:0,e:"Divide both sides by 5."},
+    {d:"On-level",q:"Perimeter of a square with side 7?",o:["28","14","49","21"],c:0,e:"All four sides: 7 \u00D7 4 = 28."},
+    {d:"On-level",q:"Write 3/4 as a percent.",o:["75%","34%","43%","60%"],c:0,e:"3 \u00F7 4 = 0.75 = 75%."},
+    {d:"On-level",q:"Find the median of 2, 5, and 9.",o:["5","16","2","9"],c:0,e:"The middle value in order is 5."},
+    {d:"Challenge",q:"What is \u22124 \u00D7 3?",o:["-12","12","-7","7"],c:0,e:"A negative times a positive is negative."},
+    {d:"Challenge",q:"Solve 3x = 21.",o:["7","18","24","63"],c:0,e:"Divide both sides by 3."},
+    {d:"Challenge",q:"Write 7/8 as a decimal.",o:["0.875","0.78","0.8","1.875"],c:0,e:"7 \u00F7 8 = 0.875."},
+    {d:"Challenge",q:"Sugar to flour is 2:5. For 10 cups flour, how much sugar?",o:["4 cups","2 cups","5 cups","25 cups"],c:0,e:"5 \u2192 10 is \u00D72, so 2 \u2192 4."},
+    {d:"Challenge",q:"Volume of a box 2 \u00D7 3 \u00D7 4?",o:["24","9","12","18"],c:0,e:"Volume = 2 \u00D7 3 \u00D7 4 = 24."},
+    {d:"Challenge",q:"Evaluate 2 + 3 \u00D7 4.",o:["14","20","24","11"],c:0,e:"Multiply first: 3 \u00D7 4 = 12, then + 2 = 14."},
+    {d:"Challenge",q:"What is 40% of 250?",o:["100","40","90","125"],c:0,e:"0.40 \u00D7 250 = 100."},
+    {d:"Challenge",q:"Which quadrant holds the point (3, \u22122)?",o:["Fourth","First","Second","Third"],c:0,e:"Positive x, negative y is the fourth quadrant."},
+    {d:"Challenge",q:"What is (\u22126) \u00F7 2?",o:["-3","3","-4","4"],c:0,e:"A negative divided by a positive is negative."},
+    {d:"Challenge",q:"What is 5\u00B2?",o:["25","10","52","20"],c:0,e:"5 \u00D7 5 = 25."},
+    {d:"Challenge",q:"What is 3/8 + 1/8?",o:["1/2","4/16","2/8","4/8"],c:0,e:"4/8 simplifies to 1/2."},
+    {d:"Challenge",q:"What is 60% of 45?",o:["27","30","25","18"],c:0,e:"0.60 \u00D7 45 = 27."},
+    {d:"Challenge",q:"Solve x \u00F7 4 = 5.",o:["20","9","1.25","45"],c:0,e:"Multiply both sides by 4."},
+    {d:"Challenge",q:"Reflect the point (2, 3) over the x-axis.",o:["(2, -3)","(-2, 3)","(-2, -3)","(3, 2)"],c:0,e:"Flipping over the x-axis changes the sign of y."},
+    {d:"Easier",q:"What is 9 × 4?",o:["36","32","45","13"],c:0,e:"Nine fours make 36."},
+    {d:"Easier",q:"What is 12 − 5?",o:["7","8","6","17"],c:0,e:"12 minus 5 is 7."},
+    {d:"Easier",q:"What is 1/2 + 1/4?",o:["3/4","2/6","1/8","2/4"],c:0,e:"1/2 is 2/4, plus 1/4 makes 3/4."},
+    {d:"Easier",q:"How many minutes are in one hour?",o:["60","30","100","24"],c:0,e:"One hour has 60 minutes."},
+    {d:"Easier",q:"What is 10% of 50?",o:["5","10","15","0.5"],c:0,e:"10% is one tenth, and 50 ÷ 10 = 5."},
+    {d:"Easier",q:"Which fraction equals one half?",o:["2/4","1/3","3/4","1/5"],c:0,e:"2/4 reduces to 1/2."},
+    {d:"On-level",q:"What is −2 × −3?",o:["6","-6","-5","5"],c:0,e:"A negative times a negative is positive."},
+    {d:"On-level",q:"Solve x − 4 = 9.",o:["13","5","36","-5"],c:0,e:"Add 4 to both sides."},
+    {d:"On-level",q:"Write 3/5 as a decimal.",o:["0.6","0.35","0.53","0.06"],c:0,e:"3 ÷ 5 = 0.6."},
+    {d:"On-level",q:"What is the mode of 2, 3, 3, and 5?",o:["3","2","5","13"],c:0,e:"The mode is the value that appears most often."},
+    {d:"On-level",q:"A $40 item is 25% off. How big is the discount?",o:["$10","$25","$15","$4"],c:0,e:"25% of 40 = 0.25 × 40 = 10."},
+    {d:"On-level",q:"Area of a triangle with base 6 and height 4?",o:["12","24","10","48"],c:0,e:"Area = 1/2 × base × height = 1/2 × 6 × 4."},
+    {d:"Challenge",q:"What is 2³?",o:["8","6","9","23"],c:0,e:"2 × 2 × 2 = 8."},
+    {d:"Challenge",q:"Solve 2x + 1 = 11.",o:["5","6","10","22"],c:0,e:"Subtract 1, then divide by 2."},
+    {d:"Challenge",q:"What is −15 ÷ 3?",o:["-5","5","-12","-18"],c:0,e:"A negative divided by a positive is negative."},
+    {d:"Challenge",q:"What is 5/6 − 1/6?",o:["2/3","4/6","4/12","1/6"],c:0,e:"4/6 simplifies to 2/3."},
+    {d:"Challenge",q:"What is 150% of 20?",o:["30","20","15","35"],c:0,e:"1.5 × 20 = 30."},
+    {d:"Challenge",q:"Which quadrant holds the point (−4, 1)?",o:["Second","First","Third","Fourth"],c:0,e:"Negative x, positive y is the second quadrant."}
+   ],
+   "Reading/Writing":[
+    {d:"Easier",p:"Maya planted three tomato seeds in a small pot. She watered them every morning and set the pot by a sunny window.",q:"Why did Maya put the pot by the window?",o:["To give the plants sunlight","To hide the plant","To keep it cold","To clean it"],c:0,e:"Plants need sunlight to grow."},
+    {d:"Easier",q:"Which word means very happy?",o:["Joyful","Tired","Angry","Hungry"],c:0,e:"Joyful means full of joy."},
+    {d:"Easier",q:"In 'The dog ran fast,' which word is a noun?",o:["dog","ran","fast","the"],c:0,e:"A noun names a person, place, or thing."},
+    {d:"Easier",p:"The library was quiet. Ben tiptoed to the back shelf and found the book he had been searching for all week.",q:"How did Ben most likely feel when he found it?",o:["Relieved","Bored","Scared","Sleepy"],c:0,e:"He'd searched all week, so finding it brings relief."},
+    {d:"Easier",q:"Choose the correctly spelled word.",o:["Friend","Freind","Frend","Friennd"],c:0,e:"Remember: a friend to the end."},
+    {d:"Easier",q:"Which sentence is punctuated correctly?",o:["Where are you going?","Where are you going.","where are you going","Where are you going,"],c:0,e:"A question starts with a capital and ends with a question mark."},
+    {d:"Easier",q:"What is the verb in 'She sings beautifully'?",o:["sings","she","beautifully","the"],c:0,e:"A verb is an action word."},
+    {d:"Easier",q:"The opposite of 'begin' is:",o:["end","start","open","go"],c:0,e:"Begin and end are opposites."},
+    {d:"Easier",q:"Which word means small?",o:["tiny","huge","loud","fast"],c:0,e:"Tiny means very small."},
+    {d:"Easier",q:"In 'Birds fly south,' which word is the verb?",o:["fly","birds","south","the"],c:0,e:"Fly is the action."},
+    {d:"Easier",p:"Sam lost his umbrella, so he got soaked in the rain.",q:"Why did Sam get wet?",o:["He had no umbrella","He went swimming","He spilled water","He washed his car"],c:0,e:"Without an umbrella, the rain soaked him."},
+    {d:"Easier",q:"What is the plural of 'box'?",o:["boxes","boxs","box","boxies"],c:0,e:"Words ending in -x add -es."},
+    {d:"Easier",q:"Which is a complete sentence?",o:["The cat sleeps.","Sleeping on the.","Under the warm.","Because it."],c:0,e:"It has a subject and a verb."},
+    {d:"Easier",q:"The opposite of 'hot' is:",o:["cold","warm","wet","big"],c:0,e:"Hot and cold are opposites."},
+    {d:"On-level",p:"Although the storm had knocked out the power, the campers stayed cheerful. They told stories by flashlight and roasted marshmallows over the fire.",q:"What is the main idea?",o:["The campers made the best of a power outage","The storm ruined the trip","Flashlights are dangerous","Marshmallows are tasty"],c:0,e:"The passage shows them staying positive."},
+    {d:"On-level",p:"The ancient bridge was fragile, so the hikers crossed it very carefully.",q:"In this sentence, 'fragile' means:",o:["easily broken","very long","brand new","colorful"],c:0,e:"They crossed carefully because it could break."},
+    {d:"On-level",p:"Liam packed sunscreen, a towel, and his swimsuit.",q:"Where is Liam most likely going?",o:["The beach or pool","School","A library","The dentist"],c:0,e:"Those items are for swimming."},
+    {d:"On-level",q:"Which is a complete sentence?",o:["The team won the game.","Running down the field.","After the long day.","Because she was late."],c:0,e:"It has a subject, a verb, and a complete thought."},
+    {d:"On-level",q:"Where does the comma belong: 'After dinner we walked home'?",o:["After 'dinner'","After 'we'","After 'walked'","No comma needed"],c:0,e:"An introductory phrase is followed by a comma."},
+    {d:"On-level",q:"A synonym for 'rapid' is:",o:["quick","slow","loud","heavy"],c:0,e:"Rapid means fast."},
+    {d:"On-level",q:"In 'The bright sun rose,' the word 'bright' is a(n):",o:["adjective","verb","noun","adverb"],c:0,e:"It describes the noun 'sun'."},
+    {d:"On-level",p:"Nina studied every night for two weeks. When the test came back, she smiled at the grade.",q:"What can you infer about Nina's grade?",o:["It was good","She failed","She skipped the test","She lost it"],c:0,e:"She studied hard and smiled, so it was likely good."},
+    {d:"On-level",p:"The crowd was enormous, filling every single seat in the stadium.",q:"In this sentence, 'enormous' means:",o:["very large","very quiet","very old","very fast"],c:0,e:"It filled every seat, so it was huge."},
+    {d:"On-level",q:"Which sentence is correct?",o:["They're going to their house over there.","Their going to there house over they're.","There going to their house over there.","They're going to there house."],c:0,e:"They're = they are, their = belonging, there = a place."},
+    {d:"On-level",p:"Recycling saves energy, reduces trash, and protects wildlife. Many cities now make it easy to recycle at home.",q:"What is the main idea?",o:["Recycling has several benefits","Trash is fun","Wildlife is dangerous","Cities are crowded"],c:0,e:"The passage lists reasons recycling helps."},
+    {d:"On-level",q:"In 'He spoke softly,' the word 'softly' is a(n):",o:["adverb","noun","adjective","verb"],c:0,e:"It describes how he spoke."},
+    {d:"On-level",q:"Which list is punctuated correctly?",o:["We bought apples, pears, and grapes.","We bought apples pears and grapes.","We bought, apples, pears, grapes.","We bought apples; pears; grapes."],c:0,e:"Commas separate items in a list."},
+    {d:"On-level",p:"Dark clouds rolled in and the wind picked up. People hurried to close their windows.",q:"What is about to happen?",o:["A storm","A parade","Sunshine","A holiday"],c:0,e:"Dark clouds and wind signal a storm."},
+    {d:"Challenge",p:"The inventor's first ten designs failed, yet she refused to quit. Each failure taught her something new, and her eleventh design finally worked.",q:"What theme does this passage suggest?",o:["Persistence leads to success","Inventing is easy","Failure is permanent","Luck matters most"],c:0,e:"She kept going despite failure and succeeded."},
+    {d:"Challenge",p:"His vague answer left everyone confused.",q:"In this sentence, 'vague' means:",o:["unclear","loud","honest","quick"],c:0,e:"It left people confused because it wasn't clear."},
+    {d:"Challenge",q:"A passage explaining how to plant a garden is mainly meant to:",o:["inform","entertain","frighten","sell candy"],c:0,e:"How-to text informs the reader."},
+    {d:"Challenge",q:"Which uses the apostrophe correctly?",o:["The dog's leash is red.","The dogs' leash, for one dog, is red.","The dogs leash is red.","The dog's are loud."],c:0,e:"A singular possessive adds apostrophe-s."},
+    {d:"Challenge",q:"\"Her smile was sunshine\" is an example of:",o:["a metaphor","a question","alliteration","a fact"],c:0,e:"It compares two things without using 'like' or 'as'."},
+    {d:"Challenge",p:"The committee will convene at noon.",q:"In this sentence, 'convene' means:",o:["meet","cancel","eat","leave"],c:0,e:"A committee convenes when it gathers to meet."},
+    {d:"Challenge",q:"In 'She ran quickly,' the word 'quickly' is a(n):",o:["adverb","adjective","noun","verb"],c:0,e:"It describes how she ran."},
+    {d:"Challenge",p:"Despite the critics' doubts, the young pianist performed flawlessly and received a standing ovation.",q:"How did the audience react?",o:["With strong approval","With boredom","By leaving early","With anger"],c:0,e:"A standing ovation shows strong approval."},
+    {d:"Challenge",q:"\"The thunder grumbled in the distance\" is an example of:",o:["personification","a simile","a fact","a rhyme"],c:0,e:"It gives thunder a human action, grumbling."},
+    {d:"Challenge",p:"Her tone was sincere, and we believed every word.",q:"In this sentence, 'sincere' means:",o:["honest","fake","angry","tired"],c:0,e:"They believed her because she was honest."},
+    {d:"Challenge",p:"Even when no one was watching, Carlos returned the extra change to the cashier.",q:"This mainly shows that Carlos is:",o:["honest","fast","fearful","lucky"],c:0,e:"Returning money no one saw shows honesty."},
+    {d:"Challenge",q:"Choose the sentence with correct subject-verb agreement:",o:["The group of students is ready.","The students is ready.","The group of student are.","The group are student ready."],c:0,e:"'Group' is singular, so it takes 'is'."},
+    {d:"Challenge",q:"An advertisement for sneakers is mainly meant to:",o:["persuade you to buy","teach history","report the weather","tell a bedtime story"],c:0,e:"Ads persuade."},
+    {d:"Challenge",p:"The directions were concise and easy to follow.",q:"In this sentence, 'concise' means:",o:["short and clear","long and confusing","funny","secret"],c:0,e:"Concise means brief and to the point."},
+    {d:"Easier",q:"A synonym for 'big' is:",o:["large","tiny","thin","short"],c:0,e:"Large means big."},
+    {d:"Easier",q:"In 'The red ball,' which word is an adjective?",o:["red","ball","the","a"],c:0,e:"'Red' describes the ball."},
+    {d:"Easier",p:"Tom heard his stomach growl. He hadn't eaten since breakfast.",q:"How does Tom most likely feel?",o:["Hungry","Sleepy","Cold","Joyful"],c:0,e:"A growling stomach means he's hungry."},
+    {d:"Easier",q:"What is the plural of 'baby'?",o:["babies","babys","babyes","baby"],c:0,e:"Words ending in -y change to -ies."},
+    {d:"Easier",q:"Which sentence is written correctly?",o:["My friend lives in Texas.","my friend lives in texas.","My Friend Lives In Texas.","my Friend lives in Texas."],c:0,e:"Start with a capital and capitalize the place name."},
+    {d:"Easier",q:"The opposite of 'up' is:",o:["down","over","fast","big"],c:0,e:"Up and down are opposites."},
+    {d:"On-level",p:"The room was spotless after they finished cleaning.",q:"In this sentence, 'spotless' means:",o:["very clean","very messy","very dark","very small"],c:0,e:"Spotless means completely clean."},
+    {d:"On-level",q:"Which sentence is in the past tense?",o:["She walked to school.","She walks to school.","She will walk to school.","She is walking."],c:0,e:"'Walked' shows it already happened."},
+    {d:"On-level",p:"Exercise strengthens your heart, builds muscle, and lifts your mood. Even a short daily walk helps.",q:"What is the main idea?",o:["Exercise has many benefits","Walking is boring","Hearts are weak","Mood never changes"],c:0,e:"The passage lists ways exercise helps."},
+    {d:"On-level",q:"In 'The happy child laughed,' the word 'happy' is a(n):",o:["adjective","adverb","verb","noun"],c:0,e:"It describes the child."},
+    {d:"On-level",q:"A synonym for 'begin' is:",o:["start","stop","close","finish"],c:0,e:"Begin and start mean the same thing."},
+    {d:"On-level",p:"She zipped her coat, pulled on gloves, and stepped outside.",q:"The weather outside is most likely:",o:["cold","hot","humid","tropical"],c:0,e:"Coat and gloves suggest cold weather."},
+    {d:"Challenge",q:"\"Time flew by\" is an example of:",o:["a metaphor","a fact","a question","a list"],c:0,e:"Time can't really fly; it's a figure of speech."},
+    {d:"Challenge",p:"The instructions were ambiguous, so we asked for help.",q:"In this sentence, 'ambiguous' means:",o:["unclear","exciting","short","loud"],c:0,e:"Ambiguous means open to more than one meaning."},
+    {d:"Challenge",p:"Though she was tired and behind, Aisha helped the new student find her class before rushing to her own.",q:"This mainly shows that Aisha is:",o:["kind","greedy","fearful","angry"],c:0,e:"Helping at her own cost shows kindness."},
+    {d:"Challenge",q:"Choose the sentence with correct subject-verb agreement:",o:["Each of the players has a jersey.","Each of the players have a jersey.","Each of the players were jerseys.","Each players has a jersey."],c:0,e:"'Each' is singular, so it takes 'has'."},
+    {d:"Challenge",q:"A news article reporting last night's election results is mainly meant to:",o:["inform","persuade","entertain","sell a product"],c:0,e:"News reports inform readers of facts."},
+    {d:"Challenge",p:"She gave a brief summary of the long book.",q:"In this sentence, 'brief' means:",o:["short","funny","sad","loud"],c:0,e:"Brief means short."}
+   ],
+   "Science":[
+    {d:"Easier",q:"What gas do plants take in for photosynthesis?",o:["Carbon dioxide","Oxygen","Nitrogen","Helium"],c:0,e:"Plants take in CO\u2082 and release oxygen."},
+    {d:"Easier",q:"How many planets are in our solar system?",o:["8","9","7","10"],c:0,e:"There are eight planets since Pluto was reclassified."},
+    {d:"Easier",q:"Which of these is a state of matter?",o:["Solid","Energy","Sound","Light"],c:0,e:"Solid, liquid, and gas are states of matter."},
+    {d:"Easier",q:"What do we call animals that eat only plants?",o:["Herbivores","Carnivores","Omnivores","Predators"],c:0,e:"Herbivores eat plants."},
+    {d:"Easier",q:"The center of an atom is called the:",o:["nucleus","electron","shell","cell"],c:0,e:"The nucleus holds protons and neutrons."},
+    {d:"Easier",q:"What force pulls objects toward Earth?",o:["Gravity","Magnetism","Friction","Wind"],c:0,e:"Gravity pulls things downward."},
+    {d:"Easier",q:"Which organ pumps blood through the body?",o:["Heart","Lungs","Brain","Stomach"],c:0,e:"The heart pumps blood."},
+    {d:"Easier",q:"When water freezes, it becomes:",o:["ice","steam","fog","gas"],c:0,e:"Freezing turns liquid water into solid ice."},
+    {d:"Easier",q:"What do bees collect from flowers?",o:["Nectar","Sand","Metal","Plastic"],c:0,e:"Bees gather nectar to make honey."},
+    {d:"Easier",q:"Which planet is closest to the sun?",o:["Mercury","Earth","Mars","Jupiter"],c:0,e:"Mercury is the innermost planet."},
+    {d:"Easier",q:"What do humans breathe in to stay alive?",o:["Oxygen","Carbon dioxide","Helium","Smoke"],c:0,e:"We need oxygen from the air."},
+    {d:"Easier",q:"A baby frog is called a:",o:["tadpole","cub","kitten","chick"],c:0,e:"Frogs start life as tadpoles."},
+    {d:"Easier",q:"Which of these is a mammal?",o:["Dog","Snake","Frog","Goldfish"],c:0,e:"Mammals have fur and feed milk to young."},
+    {d:"Easier",q:"The sun is a:",o:["star","planet","moon","comet"],c:0,e:"The sun is a star at the center of our solar system."},
+    {d:"On-level",q:"Which part of a cell controls its activities?",o:["Nucleus","Cell wall","Cytoplasm","Membrane"],c:0,e:"The nucleus is the control center."},
+    {d:"On-level",q:"Liquid water turning into vapor is called:",o:["evaporation","condensation","freezing","melting"],c:0,e:"Heat causes water to evaporate."},
+    {d:"On-level",q:"In a food chain, the sun's energy is first captured by:",o:["producers (plants)","carnivores","decomposers","herbivores"],c:0,e:"Producers make energy from sunlight."},
+    {d:"On-level",q:"Rock that forms from cooled lava or magma is:",o:["igneous","sedimentary","metamorphic","fossil"],c:0,e:"Igneous rock forms from cooled molten rock."},
+    {d:"On-level",q:"The path a planet takes around the sun is its:",o:["orbit","axis","rotation","crater"],c:0,e:"Planets travel along orbits."},
+    {d:"On-level",q:"Which body system includes the lungs?",o:["Respiratory","Digestive","Nervous","Skeletal"],c:0,e:"The respiratory system handles breathing."},
+    {d:"On-level",q:"Rubbing your hands together warms them because of:",o:["friction","gravity","evaporation","magnetism"],c:0,e:"Friction between surfaces produces heat."},
+    {d:"On-level",q:"All matter is made of tiny units called:",o:["atoms","cells","waves","sounds"],c:0,e:"Atoms are the building blocks of matter."},
+    {d:"On-level",q:"Which gas do humans breathe out as waste?",o:["Carbon dioxide","Oxygen","Nitrogen","Hydrogen"],c:0,e:"We exhale carbon dioxide."},
+    {d:"On-level",q:"The freezing point of water in Celsius is:",o:["0\u00B0C","32\u00B0C","100\u00B0C","-10\u00B0C"],c:0,e:"Water freezes at 0\u00B0C (32\u00B0F)."},
+    {d:"On-level",q:"Which is the largest planet in our solar system?",o:["Jupiter","Earth","Mars","Saturn"],c:0,e:"Jupiter is the biggest planet."},
+    {d:"On-level",q:"Which gas do plants release during photosynthesis?",o:["Oxygen","Carbon dioxide","Nitrogen","Methane"],c:0,e:"Plants give off oxygen."},
+    {d:"On-level",q:"What part of a plant absorbs water from the soil?",o:["Roots","Leaves","Flowers","Petals"],c:0,e:"Roots take in water and nutrients."},
+    {d:"On-level",q:"Melting is a solid turning into a:",o:["liquid","gas","plasma","crystal"],c:0,e:"Heat melts a solid into a liquid."},
+    {d:"Challenge",q:"Photosynthesis mainly takes place in which plant-cell part?",o:["Chloroplast","Nucleus","Vacuole","Cell wall"],c:0,e:"Chloroplasts contain chlorophyll for photosynthesis."},
+    {d:"Challenge",q:"Which is a physical change?",o:["Ice melting into water","Wood burning","Iron rusting","Baking a cake"],c:0,e:"Melting changes form but not the substance."},
+    {d:"Challenge",q:"Decomposers in an ecosystem mainly:",o:["break down dead material","produce sunlight","hunt large prey","make rock"],c:0,e:"Decomposers recycle nutrients from dead matter."},
+    {d:"Challenge",q:"What causes day and night on Earth?",o:["Earth's rotation on its axis","Earth's orbit around the sun","The moon's phases","Cloud cover"],c:0,e:"Earth spins once about every 24 hours."},
+    {d:"Challenge",q:"Which is a renewable energy source?",o:["Solar","Coal","Oil","Natural gas"],c:0,e:"Sunlight is renewable; fossil fuels are not."},
+    {d:"Challenge",q:"An object's mass measures:",o:["the amount of matter in it","its temperature","its color","its speed"],c:0,e:"Mass is how much matter an object contains."},
+    {d:"Challenge",q:"Which gas makes up most of Earth's atmosphere?",o:["Nitrogen","Oxygen","Carbon dioxide","Hydrogen"],c:0,e:"About 78% of the air is nitrogen."},
+    {d:"Challenge",q:"Sound travels fastest through:",o:["solids","liquids","gases","empty space"],c:0,e:"Tightly packed particles in solids carry sound fastest."},
+    {d:"Challenge",q:"Which is a chemical change?",o:["Iron rusting","Ice melting","Tearing paper","Boiling water"],c:0,e:"Rusting forms a new substance."},
+    {d:"Challenge",q:"The boiling point of water at sea level (Celsius) is:",o:["100\u00B0C","0\u00B0C","50\u00B0C","212\u00B0C"],c:0,e:"Water boils at 100\u00B0C (212\u00B0F)."},
+    {d:"Challenge",q:"In the water cycle, vapor cooling into droplets is:",o:["condensation","evaporation","precipitation","erosion"],c:0,e:"Cooling vapor condenses into clouds."},
+    {d:"Challenge",q:"Which organelle is the 'powerhouse' of the cell?",o:["Mitochondria","Nucleus","Ribosome","Vacuole"],c:0,e:"Mitochondria release energy for the cell."},
+    {d:"Challenge",q:"A simple electric circuit needs a power source, a path, and a:",o:["load (device)","magnet","cloud","fossil"],c:0,e:"The load, like a bulb, uses the energy."},
+    {d:"Challenge",q:"Which of these is a vertebrate?",o:["Frog","Worm","Jellyfish","Insect"],c:0,e:"A frog has a backbone."},
+    {d:"Easier",q:"Which animal is a reptile?",o:["Snake","Dog","Frog","Eagle"],c:0,e:"Snakes are reptiles."},
+    {d:"Easier",q:"What do plants need from the sun to make food?",o:["Light","Sound","Soil","Wind"],c:0,e:"Plants use light energy to make food."},
+    {d:"Easier",q:"How many legs does an insect have?",o:["6","8","4","10"],c:0,e:"Insects have six legs."},
+    {d:"Easier",q:"What is H2O commonly known as?",o:["Water","Salt","Air","Gold"],c:0,e:"H2O is water."},
+    {d:"Easier",q:"Which is the closest star to Earth?",o:["The Sun","The Moon","Mars","Polaris"],c:0,e:"The Sun is our closest star."},
+    {d:"Easier",q:"Which season is usually the coldest?",o:["Winter","Summer","Spring","Fall"],c:0,e:"Winter is the coldest season."},
+    {d:"On-level",q:"Which planet is known as the Red Planet?",o:["Mars","Venus","Jupiter","Mercury"],c:0,e:"Mars looks red because of iron in its soil."},
+    {d:"On-level",q:"What do we call animals that eat both plants and meat?",o:["Omnivores","Herbivores","Carnivores","Producers"],c:0,e:"Omnivores eat both plants and animals."},
+    {d:"On-level",q:"The process plants use to make food is called:",o:["photosynthesis","respiration","digestion","evaporation"],c:0,e:"Photosynthesis uses sunlight to make food."},
+    {d:"On-level",q:"A seesaw is an example of which simple machine?",o:["Lever","Pulley","Screw","Wedge"],c:0,e:"A seesaw pivots like a lever."},
+    {d:"On-level",q:"Which gas makes up about 21% of the air we breathe?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],c:0,e:"Oxygen is about 21% of the air."},
+    {d:"On-level",q:"A group of organs working together is called a(n):",o:["organ system","single cell","atom","crystal"],c:0,e:"Organs team up to form organ systems."},
+    {d:"Challenge",q:"Which substance makes plant leaves green?",o:["Chlorophyll","Nucleus","Vacuole","Ribosome"],c:0,e:"Chlorophyll is the green pigment in plants."},
+    {d:"Challenge",q:"What type of energy does a moving object have?",o:["Kinetic","Potential","Chemical","Sound"],c:0,e:"Kinetic energy is the energy of motion."},
+    {d:"Challenge",q:"Which of these is NOT a state of matter?",o:["Energy","Solid","Liquid","Gas"],c:0,e:"Energy is not a state of matter."},
+    {d:"Challenge",q:"An object at rest tends to:",o:["stay at rest","speed up on its own","disappear","heat up"],c:0,e:"This is inertia — it stays put unless a force acts on it."},
+    {d:"Challenge",q:"Which blood vessels carry blood away from the heart?",o:["Arteries","Veins","Capillaries","Nerves"],c:0,e:"Arteries carry blood away from the heart."},
+    {d:"Challenge",q:"The amount of space an object takes up is its:",o:["volume","mass","weight","color"],c:0,e:"Volume measures the space an object fills."}
+   ],
+   "Social Studies":[
+    {d:"Easier",q:"How many continents are there?",o:["7","5","6","8"],c:0,e:"There are seven continents."},
+    {d:"Easier",q:"Which is the largest ocean?",o:["Pacific","Atlantic","Indian","Arctic"],c:0,e:"The Pacific is the biggest ocean."},
+    {d:"Easier",q:"A person who makes maps is a:",o:["cartographer","historian","geologist","pilot"],c:0,e:"Cartographers make maps."},
+    {d:"Easier",q:"Who was the first U.S. president?",o:["George Washington","Abraham Lincoln","Thomas Jefferson","John Adams"],c:0,e:"Washington was the first president."},
+    {d:"Easier",q:"The imaginary line around Earth's middle is the:",o:["equator","prime meridian","axis","border"],c:0,e:"The equator circles Earth's middle."},
+    {d:"Easier",q:"In which direction does the sun rise?",o:["East","West","North","South"],c:0,e:"The sun rises in the east."},
+    {d:"Easier",q:"What is the capital of the United States?",o:["Washington, D.C.","New York City","Los Angeles","Boston"],c:0,e:"Washington, D.C. is the capital."},
+    {d:"Easier",q:"A group of people who make laws is a:",o:["legislature","jury","army","census"],c:0,e:"Legislatures write laws."},
+    {d:"Easier",q:"The American flag has how many stars?",o:["50","13","48","52"],c:0,e:"One star for each of the 50 states."},
+    {d:"Easier",q:"Which of these is a country?",o:["Canada","Texas","Tokyo","The Nile"],c:0,e:"Canada is a country; the others are not."},
+    {d:"Easier",q:"What do we call the study of the past?",o:["History","Biology","Geometry","Chemistry"],c:0,e:"History is the study of past events."},
+    {d:"Easier",q:"The U.S. president lives in the:",o:["White House","Empire State Building","Statue of Liberty","Gateway Arch"],c:0,e:"The White House is the president's home."},
+    {d:"Easier",q:"Which season comes right after winter?",o:["Spring","Summer","Fall","Autumn"],c:0,e:"Spring follows winter."},
+    {d:"Easier",q:"A map showing mountains and rivers is a ___ map.",o:["physical","menu","comic","music"],c:0,e:"Physical maps show natural features."},
+    {d:"On-level",q:"Which ancient civilization built the pyramids at Giza?",o:["Egyptians","Romans","Greeks","Aztecs"],c:0,e:"The ancient Egyptians built them."},
+    {d:"On-level",q:"The U.S. government's branches are legislative, executive, and:",o:["judicial","federal","military","local"],c:0,e:"The judicial branch interprets laws."},
+    {d:"On-level",q:"A peninsula is land surrounded by water on:",o:["three sides","all sides","no sides","one corner"],c:0,e:"A peninsula sticks out with water on three sides."},
+    {d:"On-level",q:"Which river was central to ancient Egypt?",o:["Nile","Amazon","Mississippi","Thames"],c:0,e:"The Nile supported Egyptian life."},
+    {d:"On-level",q:"Who writes the laws in the U.S. federal government?",o:["Congress","The President","The Supreme Court","The states only"],c:0,e:"Congress is the legislative branch."},
+    {d:"On-level",q:"What best describes a democracy?",o:["Government by the people","Rule by one king","Rule by the army","No government at all"],c:0,e:"In a democracy, people vote and have a say."},
+    {d:"On-level",q:"On a map, the key or legend tells you:",o:["what the symbols mean","the temperature","who made it","the time"],c:0,e:"The legend explains map symbols."},
+    {d:"On-level",q:"Which is a responsibility of citizens?",o:["Obeying laws","Ignoring votes","Avoiding all rules","Leaving the country"],c:0,e:"Following laws is a citizen responsibility."},
+    {d:"On-level",q:"How many U.S. states are there?",o:["50","48","52","13"],c:0,e:"There are 50 states."},
+    {d:"On-level",q:"Which continent is Egypt in?",o:["Africa","Asia","Europe","Australia"],c:0,e:"Egypt is in northeastern Africa."},
+    {d:"On-level",q:"The Statue of Liberty was a gift from which country?",o:["France","England","Spain","Italy"],c:0,e:"France gave it to the United States."},
+    {d:"On-level",q:"Lines that run east\u2013west on a globe measure:",o:["latitude","longitude","altitude","time only"],c:0,e:"Lines of latitude run east\u2013west."},
+    {d:"On-level",q:"Who interprets the laws in the U.S. government?",o:["The Supreme Court","Congress","The President","Governors"],c:0,e:"The judicial branch interprets laws."},
+    {d:"On-level",q:"Ancient Rome was centered in which modern country?",o:["Italy","Greece","Egypt","Spain"],c:0,e:"Rome is the capital of Italy."},
+    {d:"Challenge",q:"A government where a king or queen inherits power is a:",o:["monarchy","democracy","republic","voted dictatorship"],c:0,e:"Monarchs inherit their rule."},
+    {d:"Challenge",q:"The prime meridian is used to measure:",o:["longitude (east\u2013west)","latitude (north\u2013south)","altitude","temperature"],c:0,e:"Longitude is measured from the prime meridian."},
+    {d:"Challenge",q:"Ancient Greece is often called the birthplace of:",o:["democracy","the wheel","paper money","gunpowder"],c:0,e:"Greek city-states developed early democracy."},
+    {d:"Challenge",q:"Which document begins with 'We the People'?",o:["The U.S. Constitution","The Declaration of Independence","The Bill of Rights","The Magna Carta"],c:0,e:"The Constitution opens with 'We the People'."},
+    {d:"Challenge",q:"A region's climate is best described as:",o:["its typical weather over many years","today's weather","its population","its government"],c:0,e:"Climate is long-term weather patterns."},
+    {d:"Challenge",q:"The branch of government that includes the President is the:",o:["executive","legislative","judicial","municipal"],c:0,e:"The President leads the executive branch."},
+    {d:"Challenge",q:"Mesopotamia sat between which two rivers?",o:["Tigris and Euphrates","Nile and Congo","Amazon and Plata","Ganges and Indus"],c:0,e:"Mesopotamia means 'between rivers'."},
+    {d:"Challenge",q:"What does a compass rose on a map show?",o:["Directions","Distances in miles","The capital","Rainfall"],c:0,e:"A compass rose shows N, S, E, and W."},
+    {d:"Challenge",q:"The Bill of Rights is the first ten ___ to the Constitution.",o:["amendments","articles","state laws","speeches"],c:0,e:"The first ten amendments are the Bill of Rights."},
+    {d:"Challenge",q:"Which empire built a famous road network across Europe?",o:["The Roman Empire","The Maya","The Inca","Ancient Egypt"],c:0,e:"Roman roads connected their European empire."},
+    {d:"Challenge",q:"An economy based on buying and selling for profit is a:",o:["market economy","command economy with no trade","monarchy","peninsula"],c:0,e:"In a market economy, prices come from supply and demand."},
+    {d:"Challenge",q:"The equator divides Earth into the Northern and ___ Hemispheres.",o:["Southern","Eastern","Western","Polar"],c:0,e:"North and South of the equator."},
+    {d:"Challenge",q:"Which branch can declare a law unconstitutional?",o:["Judicial","Legislative","Executive","Local"],c:0,e:"Courts can strike down unconstitutional laws."},
+    {d:"Challenge",q:"Ancient Egyptians wrote using picture symbols called:",o:["hieroglyphics","an alphabet only","Roman numerals","emojis"],c:0,e:"Hieroglyphics used pictures and symbols."},
+    {d:"Easier",q:"Which U.S. coin is worth the least?",o:["Penny","Nickel","Dime","Quarter"],c:0,e:"A penny is worth one cent."},
+    {d:"Easier",q:"On a map, the color blue usually shows:",o:["water","mountains","roads","forests"],c:0,e:"Blue stands for water."},
+    {d:"Easier",q:"Which holiday celebrates U.S. independence?",o:["Fourth of July","Halloween","Valentine's Day","Earth Day"],c:0,e:"The Fourth of July marks independence."},
+    {d:"Easier",q:"A globe is a model of:",o:["Earth","the Sun","a city","a house"],c:0,e:"A globe is a round model of Earth."},
+    {d:"Easier",q:"Who leads a city's government?",o:["A mayor","A king","A general","A teacher"],c:0,e:"A mayor leads a city."},
+    {d:"Easier",q:"Which continent do people in the United States live on?",o:["North America","Europe","Africa","Asia"],c:0,e:"The U.S. is in North America."},
+    {d:"On-level",q:"The Great Wall is located in which country?",o:["China","India","Egypt","Mexico"],c:0,e:"The Great Wall is in China."},
+    {d:"On-level",q:"Which ocean is on the East Coast of the United States?",o:["Atlantic","Pacific","Indian","Arctic"],c:0,e:"The Atlantic borders the East Coast."},
+    {d:"On-level",q:"A person who studies the past is a(n):",o:["historian","biologist","artist","chef"],c:0,e:"Historians study history."},
+    {d:"On-level",q:"How often are U.S. presidential elections held?",o:["Every 4 years","Every year","Every 2 years","Every 10 years"],c:0,e:"Presidents are elected every four years."},
+    {d:"On-level",q:"Paris is the capital of which country?",o:["France","Italy","Spain","Germany"],c:0,e:"Paris is France's capital."},
+    {d:"On-level",q:"Which ancient civilization is known for philosophers like Socrates?",o:["Greece","Egypt","China","Rome"],c:0,e:"Ancient Greece is known for its philosophers."},
+    {d:"Challenge",q:"The right to a fair trial is protected by the:",o:["Bill of Rights","Declaration of Independence","Gettysburg Address","Mayflower Compact"],c:0,e:"The Bill of Rights protects many legal rights."},
+    {d:"Challenge",q:"Which line divides Earth into Eastern and Western Hemispheres?",o:["Prime meridian","Equator","Tropic of Cancer","Arctic Circle"],c:0,e:"The prime meridian runs north–south at 0° longitude."},
+    {d:"Challenge",q:"The Nile River flows into which sea?",o:["Mediterranean Sea","Red Sea","Black Sea","Caspian Sea"],c:0,e:"The Nile empties into the Mediterranean."},
+    {d:"Challenge",q:"In the U.S., the power to declare war belongs to:",o:["Congress","the President alone","the Supreme Court","state governors"],c:0,e:"The Constitution gives Congress this power."},
+    {d:"Challenge",q:"A long period of dry weather that harms crops is a:",o:["drought","flood","blizzard","tornado"],c:0,e:"A drought is an extended dry spell."},
+    {d:"Challenge",q:"Which ancient wonder, still standing, was built in Egypt?",o:["The Great Pyramid","The Colossus of Rhodes","The Hanging Gardens","The Lighthouse of Alexandria"],c:0,e:"The Great Pyramid of Giza still stands today."}
+   ]
+  };
+
+  // ---- safe score storage: real localStorage where allowed, else in-memory ----
+  var mem = {};
+  var hasLS = (function(){ try { var k="__sq"; window.localStorage.setItem(k,"1"); window.localStorage.removeItem(k); return true; } catch(e){ return false; } })();
+  function getStats(){ try { if(hasLS){ var v=window.localStorage.getItem("summerquiz:stats"); return v?JSON.parse(v):{}; } return mem.s||{}; } catch(e){ return {}; } }
+  function setStats(o){ try { if(hasLS){ window.localStorage.setItem("summerquiz:stats", JSON.stringify(o)); } else { mem.s=o; } } catch(e){} }
+
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function buildQuiz(id,diff){
+    var pool = (BANK[id]||[]).filter(function(x){return x.d===diff;});
+    var picked = shuffle(pool).slice(0,5);
+    return picked.map(function(item){
+      var opts = shuffle(item.o.map(function(t,idx){return {t:t,correct:idx===item.c};}));
+      var ci=0; for(var k=0;k<opts.length;k++){ if(opts[k].correct){ci=k;break;} }
+      return {passage:item.p||null, question:item.q, options:opts.map(function(o){return o.t;}), correctIndex:ci, explanation:item.e};
+    });
+  }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  var state = {screen:"home",subject:null,difficulty:"On-level",questions:[],current:0,selected:null,locked:false,score:0,newBest:false};
+
+  function viewHome(){
+    var stats=getStats();
+    var cards = SUBJECTS.map(function(s){
+      var st=stats[s.id];
+      var prog = (st&&st.taken>0)
+        ? '<span class="pill" style="background:'+s.tint+';color:'+s.color+'">Best '+st.best+'/5 \u00B7 '+st.taken+' done</span>'
+        : '<span class="pill muted">Not started</span>';
+      return '<button class="card" data-subj="'+s.id+'">'
+        +'<div class="cardtop"><span class="ic" style="background:'+s.tint+';color:'+s.color+'">'+s.icon+'</span>'
+        +'<span class="display cardname">'+s.label+'</span></div>'
+        +'<div class="blurb">'+s.blurb+'</div>'
+        +'<div class="cardfoot"><span class="start" style="color:'+s.color+'">Start \u2192</span>'+prog+'</div>'
+        +'</button>';
+    }).join("");
+    var seg = DIFF.map(function(d){ return '<button data-diff="'+d+'" class="'+(d===state.difficulty?"on":"")+'">'+d+'</button>'; }).join("");
+    var any = Object.keys(stats).some(function(k){ return stats[k]&&stats[k].taken>0; });
+    return '<div class="wrap">'
+      +'<div class="center"><div class="badge">\u2728 Summer Brain Boost</div>'
+      +'<h1 class="display h1">Pick a subject to practice</h1>'
+      +'<p class="sub">Five quick questions, graded as you go. Scores save on this device.</p></div>'
+      +'<div class="seglabel">Difficulty</div><div class="seg">'+seg+'</div>'
+      +'<div class="grid">'+cards+'</div>'
+      +(any?'<div class="center"><button class="reset" data-reset="1">Reset saved scores</button></div>':'')
+      +'</div>';
+  }
+
+  function viewQuiz(){
+    var q=state.questions[state.current], total=state.questions.length, s=state.subject;
+    var pct = ((state.current+(state.locked?1:0))/total)*100;
+    var optsHtml = q.options.map(function(opt,i){
+      var cls="opt", icon="";
+      if(state.locked && i===q.correctIndex){ cls+=" correct"; icon='<span class="oi" style="color:#10B981">\u2713</span>'; }
+      else if(state.locked && i===state.selected && i!==q.correctIndex){ cls+=" wrong"; icon='<span class="oi" style="color:#F43F5E">\u2717</span>'; }
+      else if(state.locked){ cls+=" dim"; }
+      return '<button class="'+cls+'" data-opt="'+i+'"'+(state.locked?" disabled":"")+'><span>'+esc(opt)+'</span>'+icon+'</button>';
+    }).join("");
+    var fb="";
+    if(state.locked){
+      var ok = state.selected===q.correctIndex;
+      fb='<div class="fb '+(ok?"ok":"no")+'">'
+        +'<div class="display fbh" style="color:'+(ok?"#065F46":"#9A3412")+'">'+(ok?"Correct!":"Not quite.")+'</div>'
+        +(q.explanation?'<div class="fbe">'+esc(q.explanation)+'</div>':'')
+        +'<button class="btn" data-next="1" style="background:'+s.color+'">'+(state.current<total-1?"Next \u2192":"See results \u2192")+'</button></div>';
+    }
+    var passage = q.passage?'<div class="passage" style="background:'+s.tint+'">'+esc(q.passage)+'</div>':'';
+    return '<div class="wrap">'
+      +'<div class="qhead"><div class="qhleft"><span class="ic sm" style="background:'+s.tint+';color:'+s.color+'">'+s.icon+'</span><b>'+s.label+'</b></div>'
+      +'<div class="qhright"><span class="count">'+(state.current+1)+' of '+total+'</span><button class="homebtn" data-home="1">\u2190 Subjects</button></div></div>'
+      +'<div class="bar"><span style="width:'+pct+'%;background:'+s.color+'"></span></div>'
+      +passage
+      +'<h2 class="q">'+esc(q.question)+'</h2>'
+      +'<div class="opts">'+optsHtml+'</div>'+fb+'</div>';
+  }
+
+  function viewResults(){
+    var s=state.subject, total=state.questions.length, score=state.score, pct=total?score/total:0;
+    var msg="Every round makes you sharper. Try again!";
+    if(pct===1)msg="Perfect score! You crushed it. \uD83C\uDF89";
+    else if(pct>=0.8)msg="Awesome work \u2014 almost flawless.";
+    else if(pct>=0.6)msg="Nice \u2014 solid progress.";
+    else if(pct>=0.4)msg="Good effort. A little more practice and you've got this.";
+    var st=getStats()[s.id], best=(st&&st.best)||0;
+    return '<div class="wrap center results">'
+      +'<span class="trophy" style="background:'+s.tint+';color:'+s.color+'">\uD83C\uDFC6</span>'
+      +(state.newBest?'<div class="badge">\u2728 New best!</div>':'')
+      +'<h1 class="display score">'+score+' / '+total+'</h1>'
+      +'<p class="rmsg">'+msg+'</p>'
+      +'<p class="rsub">'+s.label+' \u00B7 best '+best+'/'+total+'</p>'
+      +'<div class="rbtns"><button class="btn" data-retry="1" style="background:'+s.color+'">\u21BB New '+s.label+' quiz</button>'
+      +'<button class="btn ghost" data-home="1">\u2190 Pick another subject</button></div></div>';
+  }
+
+  function render(){
+    app.innerHTML = state.screen==="home"?viewHome(): state.screen==="quiz"?viewQuiz(): viewResults();
+    bind();
+    window.scrollTo(0,0);
+  }
+  function bind(){
+    app.querySelectorAll("[data-diff]").forEach(function(b){ b.onclick=function(){ state.difficulty=b.getAttribute("data-diff"); render(); }; });
+    app.querySelectorAll("[data-subj]").forEach(function(b){ b.onclick=function(){ start(b.getAttribute("data-subj")); }; });
+    var r=app.querySelector("[data-reset]"); if(r)r.onclick=function(){ if(window.confirm && !window.confirm("Clear all saved scores?"))return; setStats({}); render(); };
+    app.querySelectorAll("[data-opt]").forEach(function(b){ b.onclick=function(){ choose(parseInt(b.getAttribute("data-opt"),10)); }; });
+    var nx=app.querySelector("[data-next]"); if(nx)nx.onclick=next;
+    var rt=app.querySelector("[data-retry]"); if(rt)rt.onclick=function(){ start(state.subject.id); };
+    app.querySelectorAll("[data-home]").forEach(function(b){ b.onclick=goHome; });
+  }
+  function start(id){
+    var s=SUBJECTS.filter(function(x){return x.id===id;})[0];
+    state.subject=s; state.questions=buildQuiz(id,state.difficulty);
+    state.current=0; state.selected=null; state.locked=false; state.score=0; state.newBest=false; state.screen="quiz"; render();
+  }
+  function choose(i){
+    if(state.locked)return;
+    state.selected=i; state.locked=true;
+    if(i===state.questions[state.current].correctIndex)state.score++;
+    render();
+  }
+  function next(){
+    if(state.current<state.questions.length-1){ state.current++; state.selected=null; state.locked=false; render(); }
+    else {
+      var st=getStats(); var prev=(st[state.subject.id]&&st[state.subject.id].best)||0;
+      state.newBest=state.score>prev;
+      var cur=st[state.subject.id]||{taken:0,best:0,last:0};
+      st[state.subject.id]={taken:cur.taken+1,best:Math.max(cur.best,state.score),last:state.score};
+      setStats(st); state.screen="results"; render();
+    }
+  }
+  function goHome(){ state.screen="home"; state.subject=null; render(); }
+
+  render();
+})();
+</script>
+</body>
+</html>
